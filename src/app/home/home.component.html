@@ -1,0 +1,136 @@
+﻿<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Escanear Producto</h5>
+        <p class="card-text">
+          <input type="text" id="searchParam" (keyup)="onKeySearch($event)" 
+          #searchParam name="searchParam"
+            class="form-control" autofocus />
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Seleccione Producto</h5>
+        <p class="card-text">
+          <select name="product_id" id="product_id" (change)="onOptionsSelected($event)" #productselected
+            class="form-control">
+            <option value="0">Seleccione</option>
+
+            <option *ngFor="let product of products" value="{{ product.id }}">
+              {{ product.product_name }}
+            </option>
+          </select>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<br /><br />
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Venta en proceso</h5>
+        <div class="table-responsive" style="font-size: 12px">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Total</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let posav of pos">
+                <td>{{ posav.product_name }}</td>
+                <td>
+                  <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                    <input type="text" class="form-control" id="product_quantity" name="product_quantity"
+                      (keyup)="onKeySearch2($event, posav.id)" #product_quantity value="{{ posav.product_quantity }}"
+                      style="width: 10px" size="3" />
+                  </div>
+                </td>
+                <td>
+                  <input type="text" class="form-control" id="product_price" name="product_price" #product_price
+                    value="{{ posav.product_price }}" (keyup)="onKeySearch3($event, posav.id)" />
+                </td>
+                <td>{{ posav.product_price * posav.product_quantity }} $</td>
+                <td>
+                  <button class="btn btn-danger" (click)="deleteItem(posav.id)" type="submit">
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+              <div>
+                <h6 class="my-0">Cantidad Total</h6>
+              </div>
+              <span class="text-muted">{{ quantity }}</span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between bg-light">
+              <div class="text-success">
+                <h6 class="my-0">Total (Pesos)</h6>
+              </div>
+              <span class="text-success">$ {{ total }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+      <input type="hidden" #totalvalor name="totalvalor" id="totalvalor" value="{{ total }}">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Pago</h5>
+          <div class="order-md-2 mb-4">
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Seleccione Cliente </label>
+              <select class="form-control" formControlName="customer_id" id="customer_id" name="customer_id">
+                <option value="0">Seleccione</option>
+                <option *ngFor="let customer of customers" value="{{ customer.id }}">
+                  {{ customer.name }} ({{ customer.name }})
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlInput1">Pagado</label>
+              <input type="text" #pay  
+              (keyup)="setDebt($event, total )" 
+              class="form-control" formControlName="pay" name="pay" id="pay" />
+            </div>
+
+            <div class="form-group">
+              <label for="exampleFormControlSelect2">Forma de Pago</label>
+              <select class="form-control" id="payBy" name="payBy" formControlName="payBy">
+                <option value="Card">Tarjeta</option>
+                <option value="Cash">Efectivo</option>
+              </select>
+            </div>
+            <br /><br />
+            <button [disabled]="loading" class="btn btn-primary">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+              Realizar Venta
+            </button>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">
+              {{ error }}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

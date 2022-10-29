@@ -1,0 +1,43 @@
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Escanear Producto</h5>
+        <p class="card-text">
+          <input
+            type="text"
+            id="searchParam"
+            (keyup)="onKeySearch($event)"
+            #searchParam
+            name="searchParam"
+            class="form-control"
+            autofocus
+          />
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Seleccione Producto</h5>
+        <p class="card-text">
+          <select
+            name="product_id"
+            id="product_id"
+            (change)="onOptionsSelected($event)"
+            #productselected
+            class="form-control"
+          >
+            <option value="0">Seleccione</option>
+
+            <option *ngFor="let product of products" value="{{ product.id }}">
+              {{ product.product_name }}
+            </option>
+          </select>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
